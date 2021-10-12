@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>stETH dash</title>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container pt-4">
+    <h1 class="display-5">
+        Lido staked Ethereum dashboard
+    </h1>
+</div>
+
+<div class="container py-2">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                Total stETH in circulation
+            </h5>
+            <div class="row  d-flex justify-content-center py-2">
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h7 class="card-title">total stETH minted</h7>
+                            <h5 class="card-title">{{lido_bal_dict.latest|safe}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="py-2">
+                {{lido_bal_dict.div|safe}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-2">
+    <div class="card">
+
+        <div class="card-body">
+            <h5 class="card-title">
+                stETH price
+            </h5>
+            <div class="row d-flex justify-content-center py-2">
+                <div class="col-3 text-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <h7 class="card-title">Current stETH price</h7>
+                            <h5 class="card-title">{{price_dict.latest_steth|safe}}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 text-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <h7 class="card-title">Current WETH price</h7>
+                            <h5 class="card-title">{{price_dict.latest_eth|safe}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card py-2">
+                <div class="card-body">
+                    {{price_dict.div|safe}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container py-2">
+    <div class="card">
+
+        <div class="card-body">
+            <h5 class="card-title">
+                stETH/ETH curve pool
+            </h5>
+            <div class="row d-flex justify-content-center py-2">
+                <div class="col-3 text-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <h7 class="card-title">Current stETH price</h7>
+                            <h5 class="card-title">{{price_dict.latest_steth|safe}}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 text-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <h7 class="card-title">Current WETH price</h7>
+                            <h5 class="card-title">{{price_dict.latest_eth|safe}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card py-2">
+                <div class="card-body">
+                    {{crv_pool_dict.div|safe}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container py-2">
+    <div class="card">
+
+        <div class="card-body">
+            <h5 class="card-title">
+                bETH
+            </h5>
+            <div class="row d-flex justify-content-center py-2">
+                <div class="col-3 text-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <h7 class="card-title">bETH in circulation</h7>
+                            <h5 class="card-title">{{beth_bal_dict.latest|safe}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card py-2">
+                <div class="card-body">
+                    {{beth_bal_dict.div|safe}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container py-2">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                Farming Strategy returns
+            </h5>
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>
+                                HODL
+                            </h6>
+                            <h5 class="display-5">
+                                {{hodl_apr}} %
+                            </h5>
+                            {{hodlers}} HODLers <br>
+                            {{hodled}} stETH HODLed
+                        </div>
+                        <div class="card-footer text-end">
+                            <a href="{{url_for('hodl')}}">more details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>
+                                yearn Vault
+                            </h6>
+                            <h5 class="display-5">
+                                {{yearn_apr}} %
+                            </h5>
+                            {{yearn_hodlers}} yearners <br>
+                            {{yearn_hodled}} stETH locked
+                        </div>
+                        <div class="card-footer text-end">
+                            <a href="{{url_for('yearn')}}">more details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>
+                                $ANC farming
+                            </h6>
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="display-5">
+                                        {{anc_borrow_apr}} %
+                                    </h5>
+                                </div>
+                                <div class="col">
+                                    <h5 class="display-5">
+                                        {{anc_deposit_apr}} %
+                                    </h5>
+                                </div>
+                            </div>
+                            {{anc_hodlers}} ANC farmers <br>
+                            {{anc_hodled}} bETH locked
+                        </div>
+                        <div class="card-footer text-end">
+                            <a href="{{url_for('anchor')}}">more details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{lido_bal_dict.script|safe}}
+{{price_dict.script|safe}}
+{{beth_bal_dict.script|safe}}
+{{crv_pool_dict.script|safe}}
+
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Lido</title>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container py-3 ">
+    <a href="https://stake.lido.fi/" target="_blank">
+        <img src="{{url_for('static',filename='img/lido_poster.png')}}" style="width: 100%;">
+    </a>
+    <h1 class="display-5 pt-5">
+        Lido - Staking Liquefied
+    </h1>
+    <p>
+        Lido is a liquid staking protocol. One which is very flexible in terms of staking assets into proof of stake networks or protocols. 
+        Generally proof-of-stake requires assets to be locked in the stake. This makes these assets illiquid. Lido solves this problem.
+        Lido lets users stake their assets for daily staking rewards. User can stake any amount of tokens - no minimum.
+        When staking Lido you mint staked tokens which are pegged 1:1 to your initial stake. Your staked tokens can be used across the DeFi ecosystem to compound your yield.
+        Lido lets you use your staked assets to gain yield on top of yield. Use your tokens (which earn daily staking rewards) as collateral, for lending, yield farming and more.
+    </p>
+</div>
+
+
+
+{% endblock %}

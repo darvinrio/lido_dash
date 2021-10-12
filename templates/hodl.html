@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>just HODL</title>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container pt-4">
+    <h1 class="display-5">
+        HODLing stETH
+    </h1>
+</div>
+
+<div class="container pt-4">
+    <p>
+        <h6>The Strategy</h6>
+        <ul>
+            <li>Just HODL it</li>
+            <li>Do not share your keys with anyone</li>
+            <li>Sit back and relax</li>
+        </ul>
+    </p>
+</div>
+
+<div class="container pt-4">
+    <p>
+        <h6>The Components</h6>
+        Holding stETH in one's wallet is the most popular means of farming.stETH pays out a 5% APR every day, hence it is automatically compounded.
+        
+    </p>
+</div>
+
+<div class="container pt-4">
+    <p>
+        <h6>The risks</h6>
+        This is the safest way as the only risk is regarding Lido's smart contract risk and validator slashing risk.
+        However audits and choosing top-of-order validators mitigates this problem.
+        <br>
+        HODLing doesn't make use of one of Lido's main selling points <strong>Liquid Staking</strong>
+    </p>
+</div>
+
+<div class="container pt-4">
+    <h6>The Stats</h6>
+
+    <div class="row">
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="display-5">
+                        {{apr_dict.latest|safe}} %
+                    </h5>
+                    APR
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="display-5">
+                        {{lido_holders.latest|safe}}
+                    </h5>
+                    HODLers
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="display-5">
+                        {{lido_hodled.latest|safe}} stETH
+                    </h5>
+                    HODLed
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container pt-4">
+    <h6>The Graphs</h6>
+    
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    APR paid by Lido
+                </h5>
+                <div class="py-2">
+                    {{apr_dict.div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Number of HODLers
+                </h5>
+                <div class="py-2">
+                    {{lido_holders.div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Amount of stETH HODLed
+                </h5>
+                <div class="py-2">
+                    {{lido_hodled.div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+
+{{apr_dict.script|safe}}
+{{lido_holders.script|safe}}
+{{lido_hodled.script|safe}}
+
+
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>anchoring</title>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container pt-4">
+    <h1 class="display-5">
+        Using Anchor protocol on Terra
+    </h1>
+</div>
+
+<div class="container pt-4">
+    <p>
+    <h6>The Strategy</h6>
+    <ul>
+        <li>Use your stETH to mint bETH</li>
+        <li>Once you bridge this bETH to Terra, deposit as collateral to Anchor</li>
+        <li>Borrow UST and optionally deposit it into Anchor Earn </li>
+        <li>Keep track of LTV (no relax - Farmers don't relax)</li>
+    </ul>
+    </p>
+</div>
+
+<div class="container pt-4">
+    <div class="row d-flex ">
+        <div class="col">
+            <p>
+            <h6>The components</h6>
+            bETH tokens are wrapped tokens of Lido Finance's staked ETH (stETH) on Terra. These can be used as
+            collateral to
+            borrow UST from the saving protocol Anchor. Currently, ANC governance tokens are emitted and distributed to
+            borrowers. This is usually above 10 percent on the borrowed amount and is a viable farming opportunity. <br>
+            The Borrowed UST can be either to hodled or deposited into Anchor Earn to get further 20 percent on the
+            borrowed
+            sum.
+            </p>
+            <p>
+            <h6>The risks</h6>
+            In this strategy the main risk comes from Liquidation. One has to keep a close eye on the LTV and mustn't
+            let it
+            move above 60 at any point. For my calculation I have assumed a LTV between 30% to maximum LTV possible 45%.
+            The introduction of Nexus Protocol Vaults should make this strategy less effort-consuming. <br>
+            Other than these, there are risks associated with Anchor's smart contract and UST depegging. Moreover both
+            of these
+            are relatively new compared to Yearn strategy protocols, hence a little less resilience.
+            </p>
+        </div>
+        <div class="col">
+            <div class="container">
+                {{anc_dict.anc_div|safe}}
+                <figcaption class="figure-caption text-end">Anchor APRs</figcaption>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container pt-4">
+
+</div>
+
+<div class="container pt-4">
+    <h6>The Stats</h6>
+
+    <div class="row">
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="display-5">
+                                {{anc_farm_dict.latest_borrow|safe}} %
+                            </h5>
+                            borrow only APR
+                        </div>
+                        <div class="col">
+                            <h5 class="display-5">
+                                {{anc_farm_dict.latest_dep|safe}} %
+                            </h5>
+                            borrow+deposit APR
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="display-5">
+                        {{anc_holders.latest|safe}}
+                    </h5>
+                    ANC farmers
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="display-5">
+                        {{anc_hodled.latest|safe}} stETH
+                    </h5>
+                    used as collateral
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container pt-4">
+    <h6>The Graphs</h6>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Approx. Anchor farming APR
+                </h5>
+                <div class="py-2">
+                    {{anc_farm_dict.farm_div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Estimated number of Anchor based Farmers
+                </h5>
+                <div class="py-2">
+                    {{anc_holders.div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Estimated amount of bETH utilized for farming
+                </h5>
+                <div class="py-2">
+                    {{anc_hodled.div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="container">
+</div>
+
+
+{{anc_dict.anc_script|safe}}
+{{anc_farm_dict.farm_script|safe}}
+{{anc_holders.script|safe}}
+{{anc_hodled.script|safe}}
+
+{% endblock %}

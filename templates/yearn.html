@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>yearning</title>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container pt-4">
+    <h1 class="display-5">
+        Using yearn's steCRV vault
+    </h1>
+</div>
+
+<div class="container pt-4">
+    <p>
+    <h6>The Strategy</h6>
+    <ul>
+        <li>Deposit your stETH into Curve's steCRV pool</li>
+        <li>Deposit the steCRV LP token you have recieved in return into the Yearn's steCRV vault.</li>
+        <li>Sit back and relax</li>
+    </ul>
+    </p>
+</div>
+
+<div class="container pt-4">
+    <p>
+    <h6>The Components</h6>
+    Curve's stETH/ETH pool is Lido's main route for establishing liquid staking. By allocating a pool to swap stETH to
+    ETH, it essentially unlocks the staked ETH for a user.LPs to this pool are incentivized heavily by Lido and its one
+    of the biggest Pools in the curve protocol.
+    Yearn's steCRV vault which farms using curve's stETH/ETH liquidity pool is one of the most famous farming options
+    available on the mainnet. It mainly uses two strategies. However recently, only one has be predominantly used. <br>
+    It stakes the stETH/ETH LP - steCRV token into convex.finance, where it earns rewards in the form of CRV and CVX
+    tokens. These tokens are harvested, swapped and deposited back in the form of steCRV tokens into the vault.
+    </p>
+</div>
+<div class="container pt-4">
+    <p>
+    <h6>The risks</h6>
+    In terms of risk, this is a slightly more riskier option. This is because, this strategies uses three protocols,
+    namely Yearn, Curve and Convex atop of Lido , to farm. This means, we are exposed to any exploit across any of these
+    contracts. However, Yearn and Curve are battle tested protocols and considered as the foundation protocols for
+    Ethereum DeFi. Though the same cannot be said of Convex, its still an audited protocol.
+    </p>
+</div>
+
+<div class="container pt-4">
+    <h6>The Stats</h6>
+
+    <div class="row">
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="display-5">
+                        {{yearn_apr_dict.latest|safe}} %
+                    </h5>
+                    APR
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="display-5">
+                        {{yearn_holders.latest|safe}}
+                    </h5>
+                    Depositors in Vault
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="display-5">
+                        {{yearn_hodled.latest|safe}} stETH
+                    </h5>
+                    Deposited in Vault
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container pt-4">
+    <h6>The Graphs</h6>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Approx. Yearn stETH vault APR
+                </h5>
+                <div class="py-2">
+                    {{yearn_apr_dict.div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Approx. Yearn stETH vault depositors
+                </h5>
+                <div class="py-2">
+                    {{yearn_holders.div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Approx. amount of stETH in Yearn vault
+                </h5>
+                <div class="py-2">
+                    {{yearn_hodled.div|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{{yearn_apr_dict.script|safe}}
+{{yearn_holders.script|safe}}
+{{yearn_hodled.script|safe}}
+
+{% endblock %}
