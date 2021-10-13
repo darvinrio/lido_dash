@@ -1,13 +1,13 @@
 from flask import Flask, render_template, url_for, request, redirect
 
-# import socket
-# old_getaddrinfo = socket.getaddrinfo
-# def new_getaddrinfo(*args, **kwargs):
-#     responses = old_getaddrinfo(*args, **kwargs)
-#     return [response
-#             for response in responses
-#             if response[0] == socket.AF_INET]
-# socket.getaddrinfo = new_getaddrinfo
+import socket
+old_getaddrinfo = socket.getaddrinfo
+def new_getaddrinfo(*args, **kwargs):
+    responses = old_getaddrinfo(*args, **kwargs)
+    return [response
+            for response in responses
+            if response[0] == socket.AF_INET]
+socket.getaddrinfo = new_getaddrinfo
 
 from scripts.bal import lido_bal_plot
 from scripts.price import price_plot
@@ -96,6 +96,10 @@ def yearn():
         yearn_holders=yearn_holders,
         yearn_hodled=yearn_hodled
     )
+
+@app.route('/docs')
+def docs():
+    return render_template('docs.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

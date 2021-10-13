@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Docs</title>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container pt-4">
+    <h1 class="display-5">
+        Documentation
+    </h1>
+</div>
+
+<div class="container">
+    <h3 class="display-6">Intro</h3>
+    <p>
+        This Dash can be used to get general metrics of staking ETH in Lido protocol.
+        This Dash also has a dedicated section for strategies to look into while farming stETH. <br>
+        <strong>None of this is financial advice</strong>
+    </p>
+</div>
+
+<div class="container">
+    <h3 class="display-6">Getting the data</h3>
+    <p>
+        All data in this Dash board has been sourced from FlipsideCrypto's Ethereum and Terra tables.
+    </p>
+
+    <p>
+    <h3>stETH circulation</h3>
+    FlipsideCrypto's Ethereum tables has a dedicated table to track daily ERC20 token balance of every wallet. So by
+    querying this table to find all the balances of the stETH token - 0xae7ab96520de3a18e5e111b5eaab095312d7fe84
+    </p>
+
+    <p>
+    <h3>stETH price</h3>
+    Similar to the previous one FlipsideCrypto's Ethereum tables has a dedicated table to track hourly ERC20 token
+    price. Daily token price can be obtained by querying this table and filtereing those whose hour match with the date.
+    <br>
+    As stETH is a tokenized form of ETH , it usually trades at a price lower than ETH as, usually obtaining stETH is via
+    minting, while the most popular way to obtain the ETH underlying is via selling. So, the selling cause this lower
+    price. But this incentivizes people not to exchange stETH for ETH as they will be losing some of its value when done
+    so. When beacon chain launches, Lido could release a stETH burner to get back ETH at a proper 1:1 ratio.
+    </p>
+
+    <p>
+    <h3>Curve pool Liquidity</h3>
+    Since there is no inherent ETH balance data stored in Flipside, a work around is to use the LP tokens and the stETH
+    balance of the pool-contract - 0x06325440D014e39736583c165C2963BA99fAf14E. It's noticed that LP tokens represent a
+    1:1 ratio of ETH+stETH stored in the pool. So ETH balance can be simply obtained by deducting stETH balance from the
+    total LP tokens in circulation.
+    This LP token balance can be taken from the dailyERC20 balances table. Similarly stETH balance can also be taken
+    from the same table.
+    </p>
+
+    <p>
+    <h3>bETH in circulation</h3>
+    bETH is 1:1 token of stETH on Terra. Since Flipside doesn't have a dedicated table for cw-20 tokens on Terra, a
+    workaround is to use the Ethereum side of the bETH minting. When bETH is minted, stETH is locked in the Anchor Vault
+    - 0xA2F987A546D4CD1c607Ee8141276876C26b72Bdf on the Ethereum mainnet. So by getting the stETH balance of this
+    address should give us the bETH in circulation.
+    </p>
+
+    <p>
+    <h3>HODL strategy</h3>
+    <h5>HODLers and stETH HODLed</h5>
+    Flipside Crypto's Ethereum dailyERC20 balances table keep track of labelled address, those that are part of
+    smartcontracts. If we filter these out, generally we will be left out with user address. Assuming these are user
+    addresses, we can confidently say that these are HODLing stETH. Hence we can easily get the number of HODLers by
+    counting the distinct HODLing addresses and total stETH HODLed.
+    <h5>APR</h5>
+    In order to calculate the APR , we can track a particular address and watch how its stETH balance grows day by day.
+    However we will have to account for movement of stETH from the wallet. <br>
+    So we need to pick a proper address to track. We know that bETH pays out its staking rewards in the form of UST. Now
+    browsing the docs in Anchor will enlighten you that there exists a Liquidator contract on Ethereum that liquidates
+    the staking rewards on a daily basis and bridges it to Terra for distribution. This contract Rewards Liquidator -
+    0xdb99fdb42fec8ba414ea60b3a189208bbdbfa321, can be tracked. Since it liquidates by swapping stETH for stable coin on
+    Sushiswap , tracking the daily swap transaction will give us the approximate rewards of Lido staking. Comparing this
+    with the Liquidity locked in the Anchor Vault, will give us the APR
+    </p>
+
+    <p>
+    <h3>Yearn Strategy</h3>
+    <h5>
+        Vault users and approximate stETH in the vault.
+    </h5>
+    Depositing into the yVault for steCRV LPs, a user gets a yvCurve-stETH Vault token to keep track of his investment
+    into this vault. This token is 0xdCD90C7f6324cfa40d7169ef80b12031770B4325. This token can be queried in the Ethereum
+    dailyERC20 balances and the number of users and amount of yvCurve-stETH Vault can be found. It is also found that,
+    this yvCurve-stETH Vault token is 1:1 representation of your curve steCRV LP and we know that steCRV LP is a 1:1
+    representation of ETH+stETH in the pool. So this token count , should be the amount of stETH in the vault, if the
+    entire Vault was liquidated into stETH. However, one must remember the vault contains primarily steCRV LP tokens,
+    hence the effective stETH should be just above half of the total LP tokens
+    <h5>APR</h5>
+    For this, I will refer to fellow Flipsider Lostarious's Yearn submission on Compound USDC vault.
+    <div class="container py-5">
+        <div class="row d-flex align-items-center h-100">
+            <div class="col mb-4 mb-lg-0">
+                <figure class="bg-white p-3 rounded" style="border-left: .25rem solid #a34e78;">
+                    <blockquote class="blockquote pb-2">
+                        <p>
+                            APR is the annual rate charged for borrowing or earned through an
+                            investment. How are we going to calculate it using the reports coming from the strategy?
+                            Lets show
+                            the math. First we define the profit of the strategy for the duration the report covers as:
+                        <pre>
+                                    profit = Current Total Gain - Total Gain In the previous Report
+                                </pre>
+                        Which basically is profit made by the strategy in the time interval between the previous report
+                        and
+                        this report.
+                        <pre>
+                                    timeBetweenReports = (Timestamp of the current report - Timestamp of the previous report)
+                                </pre>
+                        Which represent how many seconds passed between the creation of the two reports.
+                        <pre>
+                                    yearover Duration = (365 * 86400) / timeBetweenReports
+                                </pre>
+                        This represent how many such reports would be created in a year (365 days in a year and 86400
+                        seconds in a day) if we create reports with this time interval (timeBetweenReports).
+                        <pre>
+                                    profitoverTotalDebt = profit / Current Total Debt
+                                </pre>
+                        This ratio shows how much the strategy gained as a portion of the principal. It also represents
+                        the
+                        profitability of the strategy, more profits using less assets → better strategy.
+                        <pre>
+                                    APR = profitoverTotalDebt * yearOverDuration
+                                </pre>
+                        SO APR basically shows how much of the principal we are going to earn back if the strategy
+                        maintains the same performance for a year.
+
+                        </p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer mb-0 font-italic">
+                        Lostarious - <a
+                            href="https://app.flipsidecrypto.com/dashboard/usdc-y-vault-generic-leverage-compound-farm-strategy-analysis-cA8ZDh"
+                            target="_blank" rel="noopener noreferrer">Flipside Grand Prize winning submission</a>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+    In essence, Yearn vaults at the end of farming transaction or event, emit a Report event to log the current
+    Liquidity. This liquidity can be compared with the previous liquidity, to estimate the gain on the execution of
+    strategy. This can then be extended to APR by calculating the timeperiod between the reports and annualizing the
+    time period.
+    </p>
+
+    <p>
+    <h3>Anchor strategy</h3>
+    <h5> Farmers and bETH used in farming</h5>
+    In order to track this statistic, we must first create a proper list of all collateral deposits and withdrawals of bETH. Since this is mainly handled by the bETH custody wallet on Terra, tracking the flow of bETH into and out of this address will give use the bETH that is used to borrow UST. 
+    Once we get this list, it must be aggregated using window functions to give us an approximated number of users using bETH as collateral and the amount of bETH used as collateral. 
+    <strong>Note: This only gives us the amount of bETH used a collateral. The exact number of farmers will be hard to find, but this will be an upper estimate of those statistics.</strong>
+    <h5>APR</h5>
+    Calculating APR from this strategy will require the calculation of Borrow and Distribution APR of Anchor. For this you can refer this indepth article by a Fellow Flipsider Kida - <a href="https://toothsome-litter-f1b.notion.site/Anchor-APR-f94a5e73af2347fbac8d73451250f019" target="_blank" rel="noopener noreferrer">Anchor APR</a>  <br>
+    Once we get the Anchor APRs, we can use them to calculate farming returns. We must remember that Anchor allows a maximum LTV of 45% only, so we will use a range of 30 to 45% LTV to make our calculations. This me any APR on top should be calculated from only on 30 - 45% of our assets. This can be done by simply multiplying APR with LTV 
+    <pre>net APR = APR * LTV</pre>
+    If you choose to deposit, a further 20% APR can be obtained on our assets. Then,
+    <pre>net APR = borrowAPR * LTV + depositAPR* LTV</pre>
+    So say if you got 10 percent on borrow APR, your effective APR on a 30% LTV will be 3.3% , while with deposit it will be around 9%.  
+    </p>
+</div>
+
+{% endblock %}

@@ -106,9 +106,9 @@ def anc_farm_plot():
     ltv1 = 0.3
     ltv2 = 0.45
     anc_df['bETH_FARM1'] = ltv1*anc_df['ANC_FARM_APR']
-    anc_df['dep_bETH_FARM1'] = (0.2*ltv1+ltv1)*anc_df['ANC_FARM_APR']
+    anc_df['dep_bETH_FARM1'] = (0.2+ltv1)*anc_df['ANC_FARM_APR']
     anc_df['bETH_FARM2'] = ltv2*anc_df['ANC_FARM_APR']
-    anc_df['dep_bETH_FARM2'] = (0.2*ltv2+ltv2)*anc_df['ANC_FARM_APR']
+    anc_df['dep_bETH_FARM2'] = (0.2+ltv2)*anc_df['ANC_FARM_APR']
 
     p = figure(x_axis_type='datetime',plot_height=400,sizing_mode="stretch_width",tools='xwheel_zoom,ywheel_zoom,xpan,reset')
     p.varea(source=cds(anc_df),x='DATE',y2='bETH_FARM1',y1='bETH_FARM2' ,fill_color='blue',fill_alpha=0.5,legend_label='Borrow farming')
