@@ -8,7 +8,7 @@ from datetime import timedelta
 import json
 
 from bokeh.plotting import figure, show
-from bokeh.models import ColumnDataSource as cds
+from bokeh.models import ColumnDataSource as cds, Label
 from bokeh.models import HoverTool, CrosshairTool, Range1d
 from bokeh.models import NumeralTickFormatter, CustomJS,DatetimeTickFormatter
 from bokeh.embed import components
@@ -30,11 +30,10 @@ def get_pool_bal():
     return df.sort_values('BALANCE_DATE').reset_index(drop=True)
 
 pool_df = get_pool_bal() 
+pool_df['TOTAL_STETH_STR'] = pool_df['TOTAL_STETH'].apply(format_number) 
+pool_df['TOTAL_ETH_STR'] = pool_df['TOTAL_ETH'].apply(format_number) 
 
 def pool_bal_plot():
-
-    pool_df['TOTAL_STETH_STR'] = pool_df['TOTAL_STETH'].apply(format_number) 
-    pool_df['TOTAL_ETH_STR'] = pool_df['TOTAL_ETH'].apply(format_number) 
 
     p = figure(x_axis_type='datetime',plot_height=400,sizing_mode="stretch_width",tools='xwheel_zoom,ywheel_zoom,xpan,reset')
     line = p.line(source=cds(pool_df),x='BALANCE_DATE',y='LP_TOKENS',line_color=lido_color,line_width=2)
@@ -94,5 +93,40 @@ def pool_bal_plot():
     return out_dict
 
 
+def pool_current_plot():
 
-    
+    latest_vals = pool_df[pool_df['BALANCE_DATE']==pool_df['BALANCE_DATE'].max()].reset_index(drop=True)
+
+
+    x1=latest_vals['TOTAL_ETH'][0]
+    x2=latest_vals['TOTAL_STETH'][0]   
+    x1_str=latest_vals['TOTAL_ETH_STR'][0]
+    x2_str=latest_vals['TOTAL_STETH_STR'][0]
+    y=0.9
+    source = cds(data=dict(
+        y=[1],
+        x1=[latest_vals['TOTAL_ETH'][0]],
+        x2=[latest_vals['TOTAL_STETH'][0]],
+    ))
+    eth_label = Label(x=x1/4,y=y,text=x1_str+" ETH",text_color='white')
+    steth_label = Label(x=x1+x2/4,y=y,text=x2_str+" stETH",text_color='white')
+    h=figure(plot_height=100,sizing_mode="stretch_width",toolbar_location=None)
+    h.hbar_stack(['x1', 'x2'], y='y', height=0.8, color=(eth_color, lido_color ), source=source)
+    h.add_layout(eth_label)
+    h.add_layout(steth_label)
+
+    h.outline_line_color = None
+    h.grid.visible=False
+    h.xaxis.visible=False
+    h.yaxis.visible=False
+
+    lido_script,lido_div = components(h)
+
+    out_dict = {
+        "script":lido_script,
+        "div":lido_div,
+        "latest_steth":x2,
+        "latest_eth":x1
+    }
+
+    return out_dict

@@ -78,21 +78,10 @@
             <h5 class="card-title">
                 stETH/ETH curve pool
             </h5>
-            <div class="row d-flex justify-content-center py-2">
-                <div class="col-3 text-center">
-                    <div class="card">
-                        <div class="card-body">
-                            <h7 class="card-title">Current stETH price</h7>
-                            <h5 class="card-title">{{price_dict.latest_steth|safe}}</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3 text-center">
-                    <div class="card">
-                        <div class="card-body">
-                            <h7 class="card-title">Current WETH price</h7>
-                            <h5 class="card-title">{{price_dict.latest_eth|safe}}</h5>
-                        </div>
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        {{crv_current_dict.div|safe}}
                     </div>
                 </div>
             </div>
@@ -209,6 +198,6 @@
 {{price_dict.script|safe}}
 {{beth_bal_dict.script|safe}}
 {{crv_pool_dict.script|safe}}
-
+{{crv_current_dict.script|safe}}
 
 {% endblock %}

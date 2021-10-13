@@ -14,7 +14,7 @@ from scripts.price import price_plot
 from scripts.anchor import anc_plot,anc_farm_plot,anc_hodled_plot,anc_hodler_plot
 from scripts.lido_apr import apr_plot,beth_balance,lido_hodler_plot,lido_hodled_plot
 from scripts.yearn import yearn_apr_plot,yearn_hodler_plot,yearn_hodled_plot
-from scripts.crv_pool import pool_bal_plot
+from scripts.crv_pool import pool_bal_plot, pool_current_plot
 
 app = Flask(__name__)
 
@@ -22,6 +22,7 @@ lido_bal_dict =  lido_bal_plot()
 price_dict = price_plot()
 beth_bal_dict = beth_balance()
 crv_pool_dict = pool_bal_plot()
+crv_current_dict = pool_current_plot()
 
 anc_dict = anc_plot()
 anc_farm_dict = anc_farm_plot()
@@ -50,6 +51,7 @@ def dash():
         price_dict=price_dict,
         beth_bal_dict=beth_bal_dict,
         crv_pool_dict=crv_pool_dict,
+        crv_current_dict=crv_current_dict,
 
         hodl_apr=apr_dict['latest'],
         hodlers=lido_holders['latest'],
