@@ -40,7 +40,7 @@ def get_anc_hodl():
     return df.sort_values('DATE').reset_index(drop=True)
 
 anc_df = get_anc_stats()
-anc_df['ANC_DIST_APR'] = anc_df['ANC_DIST_APR']+10
+anc_df['ANC_DIST_APR'] = anc_df['ANC_DIST_APR']
 anc_df['ANC_FARM_APR'] = anc_df['ANC_DIST_APR']-anc_df['DAILY_MEAN_BORROW_APR']
 
 anc_stat_df = get_anc_hodl()
